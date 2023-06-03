@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image to Painting</title>
+    <style>
+        #canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="imageUpload" accept="image/*" onchange="handleImageUpload(event)">
+    <canvas id="canvas"></canvas>
+
+    <script>
+        function handleImageUpload(event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+                var image = new Image();
+                image.src = event.target.result;
+
+                image.onload = function () {
+                    var canvas = document.getElementById('canvas');
+                    var context = canvas.getContext('2d');
+
+                    // Resize the canvas to match the image dimensions
+                    canvas.width = image.width;
+                    canvas.height = image.height;
+
+                    // Draw the image onto the canvas
+                    context.drawImage(image, 0, 0);
+
+                    // Apply painting effect
+                    applyPaintingEffect(context);
+
+                    // Convert the canvas content to a data URL
+                    var paintedImage = canvas.toDataURL();
+
+                    // Display the painted image
+                    var paintedImageElement = document.createElement('img');
+                    paintedImageElement.src = paintedImage;
+                    document.body.appendChild(paintedImageElement);
+                };
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        function applyPaintingEffect(context) {
+            // Apply painting effect here
+            // Example: Simulate a painting effect using image filters
+            var imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+            var data = imageData.data;
+
+            for (var i = 0; i < data.length; i += 4) {
+                var brightness = (3 * data[i] + 4 * data[i + 1] + data[i + 2]) >>> 3;
+                data[i] = brightness;
+                data[i + 1] = brightness;
+                data[i + 2] = brightness;
+            }
+
+            context.putImageData(imageData, 0, 0);
+        }
+    </script>
+</body>
+</html>

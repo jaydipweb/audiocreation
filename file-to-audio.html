@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text File to Speech Conversion</title>
+</head>
+<body>
+    <input type="file" id="textFileUpload" accept=".txt" onchange="handleTextFileUpload(event)">
+    <button onclick="convertTextToSpeech()">Convert to Speech</button>
+
+    <script>
+        var textContent = '';
+
+        function handleTextFileUpload(event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (event) {
+                textContent = event.target.result;
+            };
+
+            reader.readAsText(file);
+        }
+
+        function convertTextToSpeech() {
+            if (textContent === '') {
+                console.log('No text content to convert.');
+                return;
+            }
+
+            // Create a SpeechSynthesisUtterance object
+            var speechUtterance = new SpeechSynthesisUtterance();
+            speechUtterance.text = textContent;
+            speechUtterance.lang = 'en-US';
+
+            // Set the voice to a female voice (if available)
+            var voices = speechSynthesis.getVoices();
+            var femaleVoice = voices.find(function(voice) {
+                return voice.name === 'Google UK English Female';
+            });
+            speechUtterance.voice = femaleVoice;
+
+            // Speak the text
+            speechSynthesis.speak(speechUtterance);
+        }
+    </script>
+</body>
+</html>

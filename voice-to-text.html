@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voice Recording to Typing (Gujarati)</title>
+</head>
+<body>
+    <button onclick="startRecording()">Start Recording</button>
+    <button onclick="stopRecording()">Stop Recording</button>
+    <div id="result"></div>
+
+    <script>
+        var recognition = new webkitSpeechRecognition();
+        recognition.continuous = true;
+
+        recognition.onresult = function(event) {
+            var transcript = event.results[event.results.length - 1][0].transcript;
+            translateToGujarati(transcript);
+        };
+
+        function startRecording() {
+            recognition.start();
+        }
+
+        function stopRecording() {
+            recognition.stop();
+        }
+
+        function translateToGujarati(text) {
+            // Use a translation API that supports Gujarati to translate the recognized text
+            // Make an API request here and update the 'result' div with the translated text
+            document.getElementById("result").innerHTML = "Translation: " + text;
+        }
+    </script>
+</body>
+</html>
